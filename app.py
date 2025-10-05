@@ -73,7 +73,7 @@ for i in range(9,n_linhas):
     if(acertos[i]):
          nota_espec += peso_obj[1]/9
 
-if(tp_prova != "I" | "II"):
+if(tp_prova != "I" or tp_prova != "II"):
     total = nota_gerais + nota_espec + discursiva1 + discursiva2
 else:
      total = nota_gerais + discursiva1
