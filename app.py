@@ -71,11 +71,13 @@ for i in range(9):
          nota_gerais += peso_obj[0]/9
 for i in range(9,n_linhas):
     if(acertos[i]):
-         nota_espec += peso_obj[1]/9
+         nota_espec += peso_obj[1]/(n_linhas-9)
 
-if(tp_prova != "I" or tp_prova != "II"):
-    total = nota_gerais + nota_espec + discursiva1 + discursiva2
+if(tp_prova == "I"):
+    total = nota_gerais + discursiva1
+elif(tp_prova == "II"):
+    total = nota_gerais + nota_espec + discursiva1
 else:
-     total = nota_gerais + discursiva1
+    total = nota_gerais + nota_espec + discursiva1 + discursiva2
 
 st.title(total)
