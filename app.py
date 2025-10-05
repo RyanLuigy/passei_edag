@@ -1,38 +1,7 @@
-import pandas as pd
-import streamlit as st
-import openpyxl
-
-# df1 = pd.read_excel("edag.xlsx", sheet_name="Planilha1")
-# df2 = pd.read_excel("edag.xlsx", sheet_name="Planilha2")
-
-st.title("Passei EDAG")
-
-# total = 0
-
-# # Criar coluna de acertos
-# df2["Acertos"] = df2["Resposta"] == df2["Gabarito"]
-
-# # Calcular pontos
-# total += (df2["Acertos"] & (df2["Blocos"] == "A")).sum() * (30.06/9)
-# total += (df2["Acertos"] & (df2["Blocos"].isin(["B", "C"]))).sum() * (38.94/9)
-
-# # Select sliders para discursivas
-# discursiva1 = st.select_slider("Discursiva 1:", options=list(range(18)))
-# discursiva2 = st.select_slider("Discursiva 2:", options=list(range(15)))
-
-# total += (discursiva1 + discursiva2)
-
-# st.write("Pontuação total:", total)
-
-# # Mostrar tabela com True/False ao lado
-# st.dataframe(df2[["Resposta", "Gabarito", "Blocos", "Acertos"]])
-
 import streamlit as st
 
-# opções possíveis
 opcoes = ["A", "B", "C", "D", "E"]
 
-# quantidade de linhas
 tp_prova = st.selectbox("Tipo de Prova", ["I","II","III", "IV", "V", "VI", "VII"])
 
 if tp_prova == "I":
