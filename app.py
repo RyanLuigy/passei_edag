@@ -6,7 +6,8 @@ opcoesGabarito = ["A", "B", "C", "D", "E","Anulada"]
 
 st.title("Calculadora de nota do EDAG")
 st.write("Calcule sua nota no Exame de Desempenho dos Alunos de Graduação. Selecione o curso e o tipo de prova. Ao selecionar o curso, o gabarito preliminar será preenchido na coluna Gabarito, no entanto, o usuário é livre para alterar.")
-
+st.write("---")
+st.write("\n")
 curso = st.selectbox("Curso de Graduação", ["Engenharia da Computação","Engenharia Mecânica", "Engenharia Química", "Engenharia Elétrica", "Engenharia de Controle e Automação"])
 tp_prova = st.selectbox("Tipo de Prova", ["I","II","III", "IV", "V", "VI", "VII"])
 
@@ -58,7 +59,6 @@ if curso == "Engenharia da Computação":
     "E", "B"]
 
     for i in range (n_linhas):
-        if f"c2_{i}" not in st.session_state:
             st.session_state[f"c2_{i}"] = gabarito_computacao[i]
 
 if curso == "Engenharia de Controle e Automação":
@@ -70,7 +70,6 @@ if curso == "Engenharia de Controle e Automação":
     ]
 
     for i in range(n_linhas):
-        if f"c2_{i}" not in st.session_state:
             st.session_state[f"c2_{i}"] = gabarito_controle[i]
 
 if curso == "Engenharia Elétrica":
@@ -82,7 +81,6 @@ if curso == "Engenharia Elétrica":
     ]
 
     for i in range(n_linhas):
-        if f"c2_{i}" not in st.session_state:
             st.session_state[f"c2_{i}"] = gabarito_eletrica[i]
 
 if curso == "Engenharia Química":
@@ -94,7 +92,6 @@ if curso == "Engenharia Química":
     ]
 
     for i in range(n_linhas):
-        if f"c2_{i}" not in st.session_state:
             st.session_state[f"c2_{i}"] = gabarito_quimica[i]
 
 if curso == "Engenharia Mecânica":
@@ -106,7 +103,6 @@ if curso == "Engenharia Mecânica":
     "C", "B", "E"]
 
     for i in range(n_linhas):
-        if f"c2_{i}" not in st.session_state:
             st.session_state[f"c2_{i}"] = gabarito_mecanica[i]
 
 
@@ -124,6 +120,8 @@ for i in range(n_linhas):
     col1_vals.append(val1)
     col2_vals.append(val2)
     acertos.append(val1 == val2)
+
+st.write("\n")
 
 discursiva1 = st.select_slider(
     "Discursiva 1:",
@@ -174,5 +172,6 @@ elif tp_prova == "II":
     total = nota_gerais + nota_espec + discursiva1
 else:
     total = nota_gerais + nota_espec + discursiva1 + discursiva2
+
 
 st.title(f"Nota Total: {total:.2f}")
