@@ -1,5 +1,7 @@
 import streamlit as st
 import numpy as np
+import pandas as pd
+import plotly.express as px
 
 opcoesResposta = ["A", "B", "C", "D", "E"]
 opcoesGabarito = ["A", "B", "C", "D", "E","Anulada"]
@@ -50,61 +52,54 @@ col1_vals, col2_vals, acertos = [], [], []
 nota_gerais = 0
 nota_espec = 0
 
-if curso == "Engenharia da Computação":
-    gabarito_computacao = [
-    "B", "A", "A", "B", "A", "D", "E", "C", "E",
-    "A", "B", "C", "A", "E", "B", "A", "B", "B",
-    "C", "A", "C", "D", "C", "A", "A", "D", "C",
-    "C", "D", "D", "E", "A", "C", "D", "C", "B",
-    "E", "B"]
-
-    for i in range (n_linhas):
-            st.session_state[f"c2_{i}"] = gabarito_computacao[i]
-
-if curso == "Engenharia de Controle e Automação":
-    gabarito_controle = [
+gabaritos = {
+    "Engenharia da Computação": [
+        "B", "A", "A", "B", "A", "D", "E", "C", "E",
+        "A", "B", "C", "A", "E", "B", "A", "B", "B",
+        "C", "A", "C", "D", "C", "A", "A", "D", "C",
+        "C", "D", "D", "E", "A", "C", "D", "C", "B",
+        "E", "B"
+    ],
+    "Engenharia de Controle e Automação": [
         "B","A","A","B","A","D","E","C","E","A",
         "B","C","A","E","B","A","B","B","C","A",
         "C","D","A","E","A","E","E","A","A","C",
         "B","B","D","C","C","C","C","C","A"
-    ]
-
-    for i in range(n_linhas):
-            st.session_state[f"c2_{i}"] = gabarito_controle[i]
-
-if curso == "Engenharia Elétrica":
-    gabarito_eletrica = [
+    ],
+    "Engenharia Elétrica": [
         "B","A","A","B","A","D","E","C","E","A",
         "B","C","A","E","B","A","B","B","C","A",
         "A","D","A","A","E","A","C","B","C","B",
         "D","C","C","C","B","C","B","A","C"
-    ]
-
-    for i in range(n_linhas):
-            st.session_state[f"c2_{i}"] = gabarito_eletrica[i]
-
-if curso == "Engenharia Química":
-    gabarito_quimica = [
+    ],
+    "Engenharia Química": [
         "B","A","A","B","A","D","E","C","E","A",
         "B","C","A","E","B","A","B","B","C","A",
         "C","E","A","B","E","E","D","B","E","B",
         "B","B","A","E","E","E","A"
+    ],
+    "Engenharia Mecânica": [
+        "B", "A", "A", "B", "A", "D", "E", "C", "E",
+        "A", "B", "C", "A", "E", "B", "A", "C", "E",
+        "B", "A", "B", "C", "A", "D", "A", "C", "E",
+        "B", "D", "E", "E", "B", "B", "E", "B", "A",
+        "C", "B", "E"
     ]
+}
 
+if "curso_atual" not in st.session_state or st.session_state.curso_atual != curso:
+    st.session_state.curso_atual = curso
     for i in range(n_linhas):
-            st.session_state[f"c2_{i}"] = gabarito_quimica[i]
+        if i < len(gabaritos[curso]):
+            st.session_state[f"c2_{i}"] = gabaritos[curso][i]
 
-if curso == "Engenharia Mecânica":
-    gabarito_mecanica = [
-    "B", "A", "A", "B", "A", "D", "E", "C", "E",
-    "A", "B", "C", "A", "E", "B", "A", "C", "E",
-    "B", "A", "B", "C", "A", "D", "A", "C", "E",
-    "B", "D", "E", "E", "B", "B", "E", "B", "A",
-    "C", "B", "E"]
-
-    for i in range(n_linhas):
-            st.session_state[f"c2_{i}"] = gabarito_mecanica[i]
-
+if "tp_atual" not in st.session_state or st.session_state.tp_atual != tp_prova:
+    last_n = st.session_state.get("n_linhas_antigo", 0)
+    st.session_state.tp_atual = tp_prova
+    st.session_state.n_linhas_antigo = n_linhas
+    for i in range(last_n, n_linhas): 
+        if i < len(gabaritos[curso]):
+            st.session_state[f"c2_{i}"] = gabaritos[curso][i]
 
 col1, col2 = st.columns(2)
 with col1:
@@ -173,5 +168,65 @@ elif tp_prova == "II":
 else:
     total = nota_gerais + nota_espec + discursiva1 + discursiva2
 
-
 st.title(f"Nota Total: {total:.2f}")
+
+# Montar os dados de acordo com a prova
+if tp_prova == "I":
+    total = nota_gerais + discursiva1
+    dados = {
+        "Componente": ["Objetivas Gerais", "Discursiva 1", "Total"],
+        "Valor": [nota_gerais, discursiva1, total]
+    }
+
+elif tp_prova == "II":
+    total = nota_gerais + nota_espec + discursiva1
+    dados = {
+        "Componente": ["Objetivas Gerais", "Específica", "Discursiva 1", "Total"],
+        "Valor": [(nota_gerais), (nota_espec), (discursiva1), total]
+    }
+
+else:
+    total = nota_gerais + nota_espec + discursiva1 + discursiva2
+    dados = {
+        "Componente": ["Objetivas Gerais", "Específica", "Discursiva 1", "Discursiva 2", "Total"],
+        "Valor": [nota_gerais, nota_espec, discursiva1, discursiva2, total]
+    }
+
+
+df = pd.DataFrame(dados)
+
+df["y"] = "Nota"
+
+cores = {
+    "Objetivas Gerais": "#3498db",   # azul
+    "Específica": "#2ecc71",         # verde
+    "Discursiva 1": "#9b59b6",       # roxo
+    "Discursiva 2": "#1abc9c",       # ciano
+    "Total": "#e74c3c"             # vermelho
+}
+
+fig = px.bar(
+    df,
+    x="Valor",
+    y="y",
+    color="Componente",
+    orientation="h",
+    color_discrete_map=cores,
+    text="Valor",
+    hover_data={"y": False}
+)
+
+fig.update_traces(
+    texttemplate="%{x:.2f}",   
+    textposition="none",
+    insidetextfont=dict(color="white")    
+)
+
+fig.update_layout(
+    barmode="stack",
+    xaxis=dict(range=[0, total], title=None),  
+    yaxis=dict(showticklabels=False, title=None),
+    height=200
+)
+
+st.plotly_chart(fig, use_container_width=True)
